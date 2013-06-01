@@ -1,0 +1,20 @@
+
+name:                fenwick
+version:             0.1.0.0
+synopsis:            Strongly typed Fenwick trees over semigroups
+-- description:         
+
+homepage:            https://github.com/davnils/fenwick
+license:             BSD3
+license-file:        LICENSE
+author:              David Nilsson
+maintainer:          nilsson.dd+code@gmail.com
+category:            Data
+build-type:          Simple
+cabal-version:       >=1.8
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     FenwickTree
+  build-depends:       base >=4.5,
+                       semigroups == 0.9.* 
