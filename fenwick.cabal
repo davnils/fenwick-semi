@@ -15,6 +15,6 @@ cabal-version:       >=1.8
 
 library
   hs-source-dirs:      src
-  exposed-modules:     FenwickTree
+  exposed-modules:     FenwickSemi
   build-depends:       base >=4.5,
                        semigroups == 0.9.* 
