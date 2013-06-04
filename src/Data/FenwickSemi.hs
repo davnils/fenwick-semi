@@ -5,7 +5,7 @@ where
 import Control.Arrow ((***))
 import Data.Semigroup
 
--- | (Binary) Fenwick tree.
+-- | (Binary) Fenwick tree ordered according to some input indexing.
 data FenwickSemi a
   -- | Intersection of two branches, which also stores an accumulator and the number of leafs.
   = Branch a Integer (FenwickSemi a) (FenwickSemi a)
