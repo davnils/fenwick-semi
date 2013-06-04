@@ -1,21 +1,23 @@
-module FenwickSemi where
+module Data.FenwickSemi
+(FenwickSemi(..), fromList, update, prefix)
+where
 
 import Control.Arrow ((***))
 import Data.Semigroup
 
-data Fenwick a
-  = Branch a Integer (Fenwick a) (Fenwick a)
+data FenwickSemi a
+  = Branch a Integer (FenwickSemi a) (FenwickSemi a)
   | Leaf a
   deriving (Eq, Show)
 
 type Index = Integer
 
-fromList :: Semigroup a => [a] -> Fenwick a
+fromList :: Semigroup a => [a] -> FenwickSemi a
 fromList = takeTree . go
   where
   takeTree (_, _, t) = t
 
-  go :: Semigroup a => [a] -> (a, Integer, Fenwick a)
+  go :: Semigroup a => [a] -> (a, Integer, FenwickSemi a)
   go [single] = (single, 1, Leaf single)
   go l = (sum, leafs, Branch sum leafs t1 t2)
     where
@@ -24,7 +26,7 @@ fromList = takeTree . go
     ((s1, c1, t1), (s2, c2, t2)) = go *** go $ splitAt half l
     half = ceiling $ realToFrac (length l) / realToFrac 2
 
-update :: Semigroup a => Index -> a -> Fenwick a -> Fenwick a
+update :: Semigroup a => Index -> a -> FenwickSemi a -> FenwickSemi a
 update idx new tree = go path
   where
   path = traverseSeq idx tree
@@ -36,7 +38,7 @@ update idx new tree = go path
   rebuild t1 t2 count t =
     Branch (extractValue t1 <> extractValue t2) count t1 t2
 
-extractValue :: Fenwick a -> a
+extractValue :: FenwickSemi a -> a
 extractValue (Leaf val) = val
 extractValue (Branch val _ _ _) = val
 
@@ -46,7 +48,7 @@ data Direction
   | NoBranch
   deriving (Eq, Show)
 
-traverseSeq :: Index -> Fenwick a -> [(Fenwick a, Direction)]
+traverseSeq :: Index -> FenwickSemi a -> [(FenwickSemi a, Direction)]
 traverseSeq _ l@(Leaf _) = [(l, NoBranch)]
 traverseSeq idx b@(Branch _ leafs t1 t2)
   | idx < half = (b, LeftBranch)  : traverseSeq idx t1
@@ -54,7 +56,7 @@ traverseSeq idx b@(Branch _ leafs t1 t2)
   where
   half = ceiling $ realToFrac leafs / realToFrac 2
 
-prefix :: Semigroup a => Index -> Fenwick a -> a
+prefix :: Semigroup a => Index -> FenwickSemi a -> a
 prefix idx tree = go path
   where
   path = traverseSeq idx tree
