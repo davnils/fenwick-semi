@@ -17,8 +17,10 @@ data FenwickSemi a
 type Index = Integer
 
 -- | Build a Fenwick tree given an input list.
+--   Will throw an exception if given an empty list (only source of exceptions).
 fromList :: Semigroup a => [a] -> FenwickSemi a
-fromList = takeTree . go
+fromList [] = error "fenwick-semi: Can't construct empty tree"
+fromList l = takeTree $ go l
   where
   takeTree (_, _, t) = t
 
