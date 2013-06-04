@@ -1,4 +1,4 @@
-### Fenwick trees over semigroups
+### Fenwick trees over semigroups      [![Build Status](https://travis-ci.org/davnils/fenwick-semi.png)](https://travis-ci.org/davnils/fenwick-semi)
 
 This is a generalized implementation of Fenwick trees working over semigroups.
 Internally the tree is stored in a explicitly recursive data structure for simplicity.
