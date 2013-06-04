@@ -1,8 +1,8 @@
-name:                fenwick
+name:                fenwick-semi
 version:             0.1.0.0
 synopsis:            Fenwick trees over semigroups
 
-homepage:            https://github.com/davnils/fenwick
+homepage:            https://github.com/davnils/fenwick-semi
 license:             BSD3
 license-file:        LICENSE
 author:              David Nilsson
