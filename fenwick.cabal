@@ -1,8 +1,6 @@
-
 name:                fenwick
 version:             0.1.0.0
-synopsis:            Strongly typed Fenwick trees over semigroups
--- description:         
+synopsis:            Fenwick trees over semigroups
 
 homepage:            https://github.com/davnils/fenwick
 license:             BSD3

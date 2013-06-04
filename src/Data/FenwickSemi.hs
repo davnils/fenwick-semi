@@ -5,13 +5,18 @@ where
 import Control.Arrow ((***))
 import Data.Semigroup
 
+-- | (Binary) Fenwick tree.
 data FenwickSemi a
+  -- | Intersection of two branches, which also stores an accumulator and the number of leafs.
   = Branch a Integer (FenwickSemi a) (FenwickSemi a)
+  -- | Leaf containing an input value.
   | Leaf a
   deriving (Eq, Show)
 
+-- | Type of input indices.
 type Index = Integer
 
+-- | Build a Fenwick tree given an input list.
 fromList :: Semigroup a => [a] -> FenwickSemi a
 fromList = takeTree . go
   where
@@ -26,6 +31,7 @@ fromList = takeTree . go
     ((s1, c1, t1), (s2, c2, t2)) = go *** go $ splitAt half l
     half = ceiling $ realToFrac (length l) / realToFrac 2
 
+-- | Update some input value and rebuild the tree structure.
 update :: Semigroup a => Index -> a -> FenwickSemi a -> FenwickSemi a
 update idx new tree = go path
   where
@@ -38,16 +44,23 @@ update idx new tree = go path
   rebuild t1 t2 count t =
     Branch (extractValue t1 <> extractValue t2) count t1 t2
 
+-- | Extract the top-most value in a tree, i.e. either an accumulator or a leaf value.
 extractValue :: FenwickSemi a -> a
 extractValue (Leaf val) = val
 extractValue (Branch val _ _ _) = val
 
+-- | Direction type recording which branch was taken.
 data Direction
+  -- | The left branch was taken.
   = LeftBranch
+  -- | The right branch was taken.
   | RightBranch
+  -- | No direction available (leaf node).
   | NoBranch
   deriving (Eq, Show)
 
+-- | Traverse the tree top-down to some leaf which is identified by an index.
+--   Records the path taken with all branches and the final leaf node.
 traverseSeq :: Index -> FenwickSemi a -> [(FenwickSemi a, Direction)]
 traverseSeq _ l@(Leaf _) = [(l, NoBranch)]
 traverseSeq idx b@(Branch _ leafs t1 t2)
@@ -56,6 +69,7 @@ traverseSeq idx b@(Branch _ leafs t1 t2)
   where
   half = ceiling $ realToFrac leafs / realToFrac 2
 
+-- | Prefix accumulator operation, calculates the prefix up to (inclusive) some index.
 prefix :: Semigroup a => Index -> FenwickSemi a -> a
 prefix idx tree = go path
   where
